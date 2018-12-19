@@ -1,0 +1,22 @@
+{
+  "name": "word-game-constructor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jfecke/Word-Game-Constructor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jfecke/Word-Game-Constructor/issues"
+  },
+  "homepage": "https://github.com/jfecke/Word-Game-Constructor#readme",
+  "dependencies": {
+    "inquirer": "^6.2.1"
+  }
+}
