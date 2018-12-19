@@ -1,7 +1,7 @@
 var Word = require("./word.js");
 var fs = require("fs");
 var inquirer = require("inquirer");
-word = null;
+var word = null;
 
 async function getWords() {
     var words = await fs.readFile("words.txt", "utf8", async function(err, data){
@@ -18,8 +18,7 @@ function getWord(words) {
     var randomNumber = Math.floor(Math.random()*length);
     var wordChoice = words[randomNumber];
     word = new Word(wordChoice);
-
-    console.log(word.getWord());
+    
     playGame();
 }
 
