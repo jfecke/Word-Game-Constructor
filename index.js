@@ -3,7 +3,7 @@ var fs = require("fs");
 var inquirer = require("inquirer");
 var word = null;
 var guesses_left = 10;
-const pageBreak = "-------------------";
+const pageBreak = "------------------------------";
 const alphabet = "abcdefghijklmnopqrstuvwxyz";
 var wordsPlayed = [];
 var guessedLetters = [];
@@ -20,6 +20,9 @@ async function getWords() {
 
 function makeWord(words) {
     var length = words.length;
+    if (words.length == wordsPlayed.length) {
+        wordsPlayed = [];   
+    }
     var randomNumber = Math.floor(Math.random()*length);
     while (wordsPlayed.indexOf(randomNumber) >= 0) {
         randomNumber = Math.floor(Math.random()*length);
@@ -27,14 +30,17 @@ function makeWord(words) {
     var wordChoice = words[randomNumber];
     wordsPlayed.push(randomNumber);
     word = new Word(wordChoice);
+    console.log('\033[2J');
     playGame();
 }
 
 function startGame() {
+    console.log('\033[2J');
+    console.log(pageBreak);
     var myArg = inquirer.prompt([
         {
             type: "list",
-            message: "Would you like to play a Word Guess Game?",
+            message: "Would you like to play a Word Guess Game? \n" + pageBreak,
             choices: ["Yes", "No"],
             name: "choice"
         }
@@ -48,7 +54,9 @@ function startGame() {
 }
 
 function playGame() {
+    console.log(pageBreak); 
     console.log("Your word: " + word.getWord());
+    console.log(pageBreak);
     let status = winCheck();
     if (status == "lose") {
         loseGame();
@@ -64,18 +72,21 @@ function playGame() {
             }
         ]).then(function(response){
             var letter = response.guess.toLowerCase();
-            if (alphabet.indexOf(letter) >= 0) {
+            if (alphabet.indexOf(letter) >= 0 && letter.length>0) {
                 
                 if (guessedLetters.indexOf(letter) < 0) {
                     guessedLetters.push(letter);
                     let isCorrect = word.guess(letter)
                     if (isCorrect) {
+                        console.log('\033[2J');
                         console.log(pageBreak);
                         console.log("You guessed: " + letter);
                         console.log("Correct");
+                        console.log("Guesses Remaining: "+ guesses_left);
                         console.log(pageBreak);
                         playGame();
                     } else {
+                        console.log('\033[2J');
                         console.log(pageBreak);
                         console.log("You guessed: " + letter);
                         console.log("Sorry Try Again");
@@ -85,19 +96,21 @@ function playGame() {
                         playGame();
                     }
                 } else {
+                    console.log('\033[2J');
                     console.log(pageBreak);
-                        console.log("You already guessed " + letter);
-                        console.log(pageBreak);
-                        playGame();
+                    console.log("You already guessed " + letter);
+                    console.log("Guesses Remaining: "+ guesses_left);
+                    console.log(pageBreak);
+                    playGame();
                 }
-                
-                
+
             } else {
-                console.log("Please Enter a Single Letter!")
+                console.log('\033[2J');
+                console.log(pageBreak);
+                console.log("Please Enter a Single Letter!");
+                console.log(pageBreak);
                 playGame();
-            }
-            
-            
+            }            
         })
     }
 }
@@ -119,20 +132,39 @@ function winCheck() {
 }
 
 function winGame() {
+    console.log('\033[2J');
+    console.log(pageBreak);
     console.log("You Win!");
-
+    console.log(pageBreak);
+    playAgain();
 }
 
 function loseGame() {
+    console.log('\033[2J');
+    console.log(pageBreak);
     console.log("You Lose!");
-    console.log("The word was " + word.input)
+    console.log("The word was " + word.input);
+    console.log(pageBreak);
+    playAgain();
 }   
 
-
-
-
-
-
-
+function playAgain() {
+    guesses_left = 10;
+    guessedLetters = [];  
+    var myArg = inquirer.prompt([
+        {
+            type: "list",
+            message: "Would you like to play again?",
+            choices: ["Yes", "No"],
+            name: "choice"
+        }
+    ]).then(function(response){
+        if (response.choice == "Yes") {
+            getWords();
+        } else {
+            console.log("Sorry to hear that. Good Bye!")
+        }
+    })
+}
 
 startGame();
