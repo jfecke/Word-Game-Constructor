@@ -14,9 +14,14 @@ function Word(input) {
         return word
     }
     this.guess = function(letter) {
+        var isCorrect = false;
         for (let i in this.letters) {
-           this.letters[i].guessLetter();
+           var response = this.letters[i].guessLetter(letter);
+           if (response) {
+            isCorrect = true;
+           }
         }
+        return isCorrect;
     }
 }
 
