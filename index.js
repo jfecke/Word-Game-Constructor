@@ -135,6 +135,7 @@ function winGame() {
     console.log('\033[2J');
     console.log(pageBreak);
     console.log("You Win!");
+    console.log("The word was " + word.input);
     console.log(pageBreak);
     playAgain();
 }
